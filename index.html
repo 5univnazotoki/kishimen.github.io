@@ -178,11 +178,21 @@ function checkPassword(){
 
 let pw=document.getElementById("passwordBox").value;
 
-if(pw==="生きる"or"いきる"or"イキル") showPage("page2");
-else if(pw==="光"or"ひかり"or"ヒカリ") showPage("page3");
-else if(pw==="真意"or"しんい"or"シンイ") showPage("page4");
-else if(pw==="無限"or"むげん"or"ムゲン") showPage("page5");
-else if(pw==="学び"or"まなび"or"マナビ") showPage("page6");
+if(pw==="生きる") showPage("page2");
+else if(pw==="いきる") showPage("page2");
+else if(pw==="イキル") showPage("page2");
+else if(pw==="光") showPage("page3");
+else if(pw==="ひかり") showPage("page3");
+else if(pw==="ヒカリ") showPage("page3");
+else if(pw==="真意") showPage("page4");
+else if(pw==="しんい") showPage("page4");
+else if(pw==="シンイ") showPage("page4");
+else if(pw==="無限") showPage("page5");
+else if(pw==="むげん") showPage("page5");
+else if(pw==="ムゲン") showPage("page5");
+else if(pw==="学び") showPage("page6");
+else if(pw==="まなび") showPage("page6");
+else if(pw==="マナビ") showPage("page6");
 else alert("パスワードが違います");
 
 }
