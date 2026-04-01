@@ -79,6 +79,24 @@ background:white;
 padding:30px;
 }
 
+#clearBox{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+text-align:center;
+}
+
+#clearBox h1{
+font-size:36px;
+font-weight:900;
+}
+
+#clearBox p{
+font-size:28px;
+margin-top:20px;
+}
+
 </style>
 </head>
 
@@ -129,24 +147,14 @@ padding:30px;
 <button class="backBtn" onclick="goHome()">戻る</button>
 </div>
 
-<!-- 7ページ -->
+<!-- 7ページ（クリア画面） -->
 <div id="page7" class="page">
 
-<button class="backBtn" onclick="goHome()">戻る</button>
+<div id="clearBox">
 
-<div id="ranking">
+<h1>おめでとうございます！謎クリアです！</h1>
 
-<h3>大学・名前</h3>
-
-<input id="nameInput">
-
-<br>
-
-<button onclick="addName()">進む</button>
-
-<h3>ランキング</h3>
-
-<ol id="list"></ol>
+<p id="clearTime"></p>
 
 </div>
 
@@ -197,6 +205,7 @@ else if(pw==="ムゲン") showPage("page5");
 else if(pw==="学び") showPage("page6");
 else if(pw==="まなび") showPage("page6");
 else if(pw==="マナビ") showPage("page6");
+else if(pw==="むりはきけん") showPage("page7");
 else alert("パスワードが違います");
 
 }
@@ -238,6 +247,21 @@ list.appendChild(li);
 });
 
 });
+
+function showPage7(){
+
+showPage("page7");
+
+let now = new Date();
+
+let time =
+now.getHours().toString().padStart(2,"0") + "時" +
+now.getMinutes().toString().padStart(2,"0") + "分" +
+now.getSeconds().toString().padStart(2,"0") + "秒";
+
+document.getElementById("clearTime").textContent = "クリア時間：" + time;
+
+}
 
 </script>
 
