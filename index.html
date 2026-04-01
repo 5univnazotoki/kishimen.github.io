@@ -155,62 +155,6 @@ margin-top:20px;
 <h1>おめでとうございます！<br>謎クリアです！</h1>
 
 <p id="clearTime"></p>
-
-/* ===== クリア画面演出 ===== */
-
-#page8{
-background: linear-gradient(270deg, #ff4e50, #f9d423, #24c6dc, #5433ff);
-background-size: 800% 800%;
-animation: bgMove 10s ease infinite;
-color:white;
-}
-
-@keyframes bgMove{
-0%{background-position:0% 50%;}
-50%{background-position:100% 50%;}
-100%{background-position:0% 50%;}
-}
-
-/* テキストアニメーション */
-#clearBox h1{
-font-size:48px;
-animation: pop 1s ease;
-text-shadow: 0 0 20px rgba(0,0,0,0.5);
-}
-
-@keyframes pop{
-0%{transform:scale(0.5); opacity:0;}
-100%{transform:scale(1); opacity:1;}
-}
-
-/* クリア時間 */
-#clearTime{
-font-size:36px;
-margin-top:30px;
-color:yellow;
-animation: fadeIn 2s ease;
-}
-
-@keyframes fadeIn{
-0%{opacity:0;}
-100%{opacity:1;}
-}
-
-/* キラキラ（簡易紙吹雪） */
-.confetti{
-position:fixed;
-width:10px;
-height:10px;
-background:red;
-top:-10px;
-animation: fall linear infinite;
-}
-
-@keyframes fall{
-to{
-transform: translateY(110vh) rotate(360deg);
-}
-}
   
 </div>
 
@@ -317,41 +261,6 @@ now.getMinutes().toString().padStart(2,"0") + "分" +
 now.getSeconds().toString().padStart(2,"0") + "秒";
 
 document.getElementById("clearTime").textContent = "クリア時間：" + time;
-
-}
-
-function startConfetti(){
-
-for(let i=0;i<50;i++){
-let conf=document.createElement("div");
-conf.className="confetti";
-
-conf.style.left=Math.random()*100+"vw";
-conf.style.animationDuration=(Math.random()*3+2)+"s";
-conf.style.backgroundColor=[
-"red","yellow","blue","green","pink"
-][Math.floor(Math.random()*5)];
-
-document.body.appendChild(conf);
-}
-
-}
-
-function showPage8(){
-
-showPage("page8");
-
-let now = new Date();
-
-let time =
-now.getHours().toString().padStart(2,"0") + "時" +
-now.getMinutes().toString().padStart(2,"0") + "分" +
-now.getSeconds().toString().padStart(2,"0") + "秒";
-
-document.getElementById("clearTime").textContent = "クリア時間：" + time;
-
-/* 紙吹雪スタート */
-startConfetti();
 
 }
 
