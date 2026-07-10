@@ -116,12 +116,86 @@ font-weight:400;    /* 細くする */
 
 /* ===== ヒントページ ===== */
 
+/* ===== ヒントページ ===== */
+
 .hintPage{
-    padding:30px;
-    height:100vh;
-    overflow-y:auto;
+    max-width:700px;      /* 横幅を制限 */
+    margin:0 auto;        /* 中央寄せ */
+    padding:20px;
     box-sizing:border-box;
     background:white;
+}
+
+.hintPage h1{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.hintPage h2{
+    font-size:28px;
+    margin-top:35px;
+}
+
+details{
+    margin:15px 0;
+    border:2px solid #ccc;
+    border-radius:8px;
+    background:#f8f8f8;
+}
+
+summary{
+    padding:15px;
+    cursor:pointer;
+    font-size:22px;
+    font-weight:bold;
+    list-style:none;
+}
+
+summary::-webkit-details-marker{
+    display:none;
+}
+
+summary::before{
+    content:"▶ ";
+}
+
+details[open] summary::before{
+    content:"▼ ";
+}
+
+details p{
+    margin:0;
+    padding:15px;
+    border-top:1px solid #ddd;
+    font-size:20px;
+    line-height:1.8;
+    word-break:break-word;   /* 長い文章も折り返す */
+}
+
+/* スマホ用 */
+@media (max-width: 768px){
+
+    .hintPage{
+        padding:15px;
+    }
+
+    .hintPage h1{
+        font-size:30px;
+    }
+
+    .hintPage h2{
+        font-size:24px;
+    }
+
+    summary{
+        font-size:20px;
+        padding:12px;
+    }
+
+    details p{
+        font-size:18px;
+        padding:12px;
+    }
 }
 
 .hintTitle{
