@@ -77,6 +77,11 @@ transform:translateX(-50%);
     margin: 50px auto;
 }
 
+#page9{
+    height:auto;
+    min-height:100vh;
+}
+
 #ranking{
 position:absolute;
 top:150px;
@@ -352,25 +357,25 @@ else alert("パスワードが違います");
 
 document.addEventListener("DOMContentLoaded", function(){
 
-    const acc = document.getElementsByClassName("accordion");
+    const acc = document.querySelectorAll(".accordion");
 
-    for(let i=0;i<acc.length;i++){
+    acc.forEach(button => {
 
-        acc[i].addEventListener("click",function(){
+        button.addEventListener("click", function(){
 
             this.classList.toggle("active");
 
-            const panel=this.nextElementSibling;
+            const panel = this.nextElementSibling;
 
-            if(panel.style.display==="block"){
-                panel.style.display="none";
+            if(getComputedStyle(panel).display === "none"){
+                panel.style.display = "block";
             }else{
-                panel.style.display="block";
+                panel.style.display = "none";
             }
 
         });
 
-    }
+    });
 
 });
 
