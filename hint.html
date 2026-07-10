@@ -936,6 +936,14 @@ document.getElementById("clearTime").textContent = "クリア時間：" + time;
 
 }
 
+// URLに #page9 が付いていたらpage9を表示
+window.addEventListener("load", function(){
+
+    if(location.hash === "#page9"){
+        showPage("page9");
+    }
+
+});
 </script>
 
 </body>
