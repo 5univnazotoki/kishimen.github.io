@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Desktop Navigation</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@900&display=swap" rel="stylesheet">
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+<style>
+
+body{
+margin:0;
+font-family:'Noto Sans JP', sans-serif;
+font-weight:900;
+font-size:24px; /* 約1.5倍 */
+}
+
+.page{
+display:none;
+position:relative;
+width:100vw;
+height:100vh;
+}
+
+.page img{
+width:100%;
+height:100%;
+object-fit:contain;
+background:white;
+}
+
+.active{
+display:block;
+}
+
+/* 1ページ目入力UI */
+.bottomBox{
+position:absolute;
+bottom:15%;
+left:50%;
+transform:translateX(-50%);
+text-align:center;
+}
+
+input{
+padding:15px;
+font-size:24px;
+width:300px;
+margin-bottom:15px;
+
+border:4px solid black; 
+}
+
+button{
+padding:15px 30px;
+font-size:24px;
+cursor:pointer;
+background:black;
+color:white;
+border:none;
+}
+
+.backBtn{
+position:absolute;
+bottom:50px;
+left:50%;
+transform:translateX(-50%);
+}
+
+#page8 .backBtn {
+    position: static;
+    transform: none;
+    display: block;
+    margin: 50px auto;
+}
+
+#page9{
+    height:auto;
+    min-height:100vh;
+}
+
+#ranking{
+position:absolute;
+top:150px;
+left:50%;
+transform:translateX(-50%);
+background:white;
+padding:30px;
+}
+
+#clearBox{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+text-align:center;
+}
+
+#clearBox h1{
+font-size:36px;
+font-weight:900;
+}
+
+#clearBox p{
+font-size:28px;
+margin-top:20px;
+}
+
+.smallText{
+font-size:20px;     /* 小さくする */
+font-weight:400;    /* 細くする */
+}
+
+/* ===== ヒントページ ===== */
+
+/* ===== ヒントページ ===== */
+
+.hintPage{
+    max-width:700px;      /* 横幅を制限 */
+    margin:0 auto;        /* 中央寄せ */
+    padding:20px;
+    box-sizing:border-box;
+    background:white;
+}
+
+.hintPage h1{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.hintPage h2{
+    font-size:28px;
+    margin-top:35px;
+}
+
+details{
+    margin:15px 0;
+    border:2px solid #ccc;
+    border-radius:8px;
+    background:#f8f8f8;
+}
+
+summary{
+    padding:15px;
+    cursor:pointer;
+    font-size:22px;
+    font-weight:bold;
+    list-style:none;
+}
+
+summary::-webkit-details-marker{
+    display:none;
+}
+
+summary::before{
+    content:"▶ ";
+}
+
+details[open] summary::before{
+    content:"▼ ";
+}
+
+details p{
+    margin:0;
+    padding:15px;
+    border-top:1px solid #ddd;
+    font-size:20px;
+    line-height:1.8;
+    word-break:break-word;   /* 長い文章も折り返す */
+}
+
+/* スマホ用 */
+@media (max-width: 768px){
+
+    .hintPage{
+        padding:15px;
+    }
+
+    .hintPage h1{
+        font-size:30px;
+    }
+
+    .hintPage h2{
+        font-size:24px;
+    }
+
+    summary{
+        font-size:20px;
+        padding:12px;
+    }
+
+    details p{
+        font-size:18px;
+        padding:12px;
+    }
+}
+
+.hintTitle{
+    margin-top:40px;
+    margin-bottom:10px;
+}
+
+.accordion{
+    width:100%;
+    text-align:left;
+    padding:15px;
+    margin-top:10px;
+    font-size:22px;
+    background:#f0f0f0;
+    color:#000;
+    border:none;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.accordion:hover{
+    background:#e0e0e0;
+}
+
+.accordion::before{
+    content:"▶ ";
+}
+
+.accordion.active::before{
+    content:"▼ ";
+}
+
+.panel{
+    display:none;
+    padding:15px 20px;
+    background:#fafafa;
+    border-left:5px solid black;
+    margin-bottom:15px;
+    font-size:20px;
+    line-height:1.8;
+}
+
+/* page9だけ戻るボタンを下に配置 */
+#page9 .backBtn{
+    position:static;
+    transform:none;
+    display:block;
+    margin:40px auto;
+}
+
+    
+</style>
+</head>
+
+<body>
+
+<!-- 1ページ -->
+<div id="page1" class="page active">
+<img src="xkey.png">
+
+<div class="bottomBox">
+
+<input id="passwordBox">
+
+<br>
+
+<button onclick="checkPassword()">進む</button>
+
+</div>
+</div>
+
+<!-- 2ページ -->
+<div id="page2" class="page">
+<img src="tokyo.png">
+<button class="backBtn" onclick="goHome()">戻る</button>
+</div>
+
+<!-- 3ページ -->
+<div id="page3" class="page">
+<img src="nagoya.png">
+<button class="backBtn" onclick="goHome()">戻る</button>
+</div>
+
+<!-- 4ページ -->
+<div id="page4" class="page">
+<img src="kyoto.png">
+<button class="backBtn" onclick="goHome()">戻る</button>
+</div>
+
+<!-- 5ページ -->
+<div id="page5" class="page">
+<img src="hiroshima.png">
+<button class="backBtn" onclick="goHome()">戻る</button>
+</div>
+
+<!-- 6ページ -->
+<div id="page6" class="page">
+<img src="kyushu3.png">
+<button class="backBtn" onclick="goHome()">戻る</button>
+</div>
+
+<!-- 回答ページ -->
+<div id="page8" class="page">
+<img src="answer_1.jpg" alt="画像1">
+<img src="answer_2.jpg" alt="画像2">
+<img src="answer_3.jpg" alt="画像3">
+<img src="answer_4.jpg" alt="画像4">
+<img src="answer_5.jpg" alt="画像5">
+
+<button class="backBtn" onclick="goHome()">戻る</button>
+
+</div>
+
+<!-- ヒントページ -->
+<div id="page9" class="page">
+
+<div class="hintPage">
+
+<h1>お困りの方へ</h1></h1>
+
+<h2>そもそも</h2>
+
+<details>
+    <summary>0-1</summary>
+    <details>
+        <summary>Q.何をしたらいいか分からないⅠ</summary>
+
+        <p>
+            司会の説明を思い出してみてね！
+        </p>
+    </details>
+    <details>
+        <summary>Q.何をしたらいいか分からないⅡ</summary>
+
+        <p>
+            「合言葉」を入れてみよう、最近なにか配られましたよね！
+        </p>
+    </details>
+</details>
+
+<details>
+    <summary>0-2</summary>
+    <details>
+        <summary>Q.合言葉入れたけど何をしていいか分からないⅠ</summary>
+
+        <p>
+            まずは辺りを見渡してみよう
+        </p>
+    </details>
+    <details>
+        <summary>Q.合言葉入れたけど何をしていいか分からないⅡ</summary>
+
+        <p>
+            手元の画像と関係のありそうな意味ありげなポスターとか、無い？
+        </p>
+    </details>
+</details>
+
+<h2>大学別の謎</h2>
+
+<details>
+    <summary>名大・京大</summary>
+    <details>
+        <summary>Q.何をしたらいいか分からないⅠ</summary>
+
+        <p>
+            カクカクした線ありますね、この線と同じ形の線が近くにないか探してみましょう
+        </p>
+    </details>
+    <details>
+        <summary>Q.何をしたらいいか分からないⅡ</summary>
+
+        <p>
+            その線のそばにあるカタカナ、意味ありげですね…
+        </p>
+    </details>
+</details>
+
+<details>
+    <summary>東大・広大</summary>
+    <details>
+        <summary>Q.何をしたらいいか分からない</summary>
+
+        <p>
+            ◇とか△とか、読めそうなもの近くにないですか？
+        </p>
+    </details>
+</details>
+
+<details>
+    <summary>九大</summary>
+    <details>
+        <summary>Q.何をしたらいいか分からない</summary>
+
+        <p>
+            なんかモニョモニョした枠がありますね、似た枠がないか探してみましょう
+        </p>
+    </details>
+     <details>
+        <summary>Q.探したけど、その後どうするの？Ⅰ</summary>
+
+        <p>
+            共通したこれがあれば4つの言葉になるのにな……ってもの、考えてみましょう
+        </p>
+    </details>
+         <details>
+        <summary>Q.探したけど、その後どうするの？Ⅱ</summary>
+
+        <p>
+            □がただの枠の役割とは限らないですよ
+        </p>
+    </details>
+</details>
+<details>
+    <summary>その後</summary>
+    <details>
+        <summary>Q.自分の謎は解けました。次は？Ⅰ</summary>
+
+        <p>
+            下に皆さん共通の謎があります。これは何を意味してるのでしょうか？
+        </p>
+    </details>
+     <details>
+        <summary>Q.自分の謎は解けました。次は？Ⅱ</summary>
+
+        <p>
+            ひとまず他大学に話しかけてみてもいいんですよ？
+        </p>
+    </details>
+         <details>
+        <summary>Q.自分の謎は解けました。次は？Ⅲ</summary>
+
+        <p>
+            ①や②は何を表してるのでしょう？
+        </p>
+    </details>
+</details>
+
+<h2>次の謎</h2>
+
+<details>
+    <summary>2-1-1</summary>
+    <details>
+        <summary>Q.□ナラベロ、ってなに？</summary>
+
+        <p>
+            □を探して並べてみてください
+        </p>
+    </details>
+</details>
+
+<details>
+    <summary>2-1-2</summary>
+    <details>
+        <summary>Q.□を集めたけど言葉にならないよⅠ</summary>
+
+        <p>
+            ただの□全てを集めるとは限らないですよ
+        </p>
+    </details>
+    <details>
+        <summary>Q.□を集めたけど言葉にならないよⅡ</summary>
+
+        <p>
+            みんなの答えを思い出してみてください
+        </p>
+    </details>
+     <details>
+        <summary>Q.□を集めたけど言葉にならないよⅢ</summary>
+
+        <p>
+            緑色の□は全部で5つになります
+        </p>
+    </details>
+</details>
+
+<details>
+    <summary>2-1-3</summary>
+    <details>
+        <summary>Q.緑色の□が5個もないよⅠ</summary>
+
+        <p>
+            必ずこの部屋のどこかにありますよ
+        </p>
+    </details>
+     <details>
+        <summary>Q.緑色の□が5個もないよⅡ</summary>
+
+        <p>
+            誰かが身に着けているかもしれませんね
+        </p>
+    </details>
+</details>
+
+<details>
+    <summary>2-1-4</summary>
+    <details>
+        <summary>Q.5つ集めてどうするの？</summary>
+
+        <p>
+            並べましょう！総あたりしてもいいんですよ…？
+        </p>
+    </details>
+</details>
+
+<details>
+    <summary>2-2-1</summary>
+    <details>
+        <summary>Q.🦐👓ってなに？Ⅰ</summary>
+
+        <p>
+            見たまんまです、オシャレで可愛いですね。そういえば今回のマスコットキャラクターってご存じですか？
+        </p>
+    </details>
+     <details>
+        <summary>Q.🦐👓ってなに？Ⅱ</summary>
+
+        <p>
+            絶対にどこかにいるので隅々まで探してみてくださいね
+        </p>
+    </details>
+</details>
+
+<details>
+    <summary>2-2-2</summary>
+    <details>
+        <summary>Q.HPってなに？Ⅰ</summary>
+
+        <p>
+            五大学開催にあたって皆さんが利用しているものです
+        </p>
+    </details>
+     <details>
+        <summary>Q.HPってなに？Ⅱ</summary>
+
+        <p>
+           ホームページのことです。この略語そんなに古いですか？
+        </p>
+    </details>
+</details>
+
+<details>
+    <summary>2-2-3</summary>
+    <details>
+        <summary>Q.おせ？</summary>
+
+        <p>
+            スマホを使って色々試してみてください
+        </p>
+    </details>
+</details>
+
+<h2>最後の謎</h2>
+
+<details>
+    <summary>3-1</summary>
+    <details>
+        <summary>Q.何をしたらいいか分からないⅠ</summary>
+
+        <p>
+            いかにもなマス目とヒントがありますね、頑張れ！
+        </p>
+    </details>
+    <details>
+        <summary>Q.何をしたらいいか分からないⅡ</summary>
+
+        <p>
+            これはクロスワードです。やってみましょう。
+        </p>
+    </details>
+</details>
+
+<details>
+    <summary>3-2</summary>
+    <details>
+        <summary>Q.なにこれ？（タテ1）Ⅰ</summary>
+
+        <p>
+            合言葉……は今日使いましたよね
+        </p>
+    </details>
+    <details>
+        <summary>Q.なにこれ？（タテ1）Ⅱ</summary>
+
+        <p>
+            この絵はどこかの都道府県を表しているらしいです？
+        </p>
+    </details>
+</details>
+
+<details>
+    <summary>3-2-1</summary>
+    <details>
+        <summary>Q.なにこれ？（タテ2）</summary>
+
+        <p>
+            このモニョモニョフレーム、どこかで見たことありませんか？
+        </p>
+    </details>
+</details>
+
+<details>
+    <summary>3-2-2</summary>
+    <details>
+        <summary>Q.ヒントポスターはわかるけどどうするの（タテ2）Ⅰ</summary>
+
+        <p>
+            共通したこれがあれば4つ規則的な言葉になるのにな……ってもの、考えてみましょう
+        </p>
+    </details>
+    <details>
+        <summary>Q.ヒントポスターはわかるけどどうするの（タテ2）Ⅱ</summary>
+
+        <p>
+            ・・・があるのも意味がありますよ
+        </p>
+    </details>
+    <details>
+        <summary>Q.ヒントポスターはわかるけどどうするの（タテ2）Ⅲ</summary>
+
+        <p>
+            □がただの枠の役割とは限らないですよ
+        </p>
+    </details>
+</details>
+
+<details>
+    <summary>3-3</summary>
+    <details>
+        <summary>Q.なにこれ？（タテ3）Ⅰ</summary>
+
+        <p>
+            合言葉……は今日使いましたよね
+        </p>
+    </details>
+    <details>
+        <summary>Q.なにこれ？（タテ3）Ⅱ</summary>
+
+        <p>
+            この背景イラスト、どこかで見たことあるような……
+        </p>
+    </details>
+    <details>
+        <summary>Q.なにこれ？（タテ3）Ⅲ</summary>
+
+        <p>
+            例えば誰かの胸元に…見覚えはありませんか？
+        </p>
+    </details>
+</details>
+
+<details>
+    <summary>3-4</summary>
+    <details>
+        <summary>Q.なにこれ？（ヨコ1）</summary>
+
+        <p>
+            自信もってください。あなたは何士（師）を志して人生を歩んでいるのですか？
+        </p>
+    </details>
+</details>
+
+<details>
+    <summary>3-5</summary>
+    <details>
+        <summary>Q.森本さんってどこにいますか？（ヨコ4）Ⅰ</summary>
+
+        <p>
+            わかりません😭
+        </p>
+    </details>
+    <details>
+        <summary>Q.森本さんってどこにいますか？（ヨコ4）Ⅱ</summary>
+
+        <p>
+            でも、ここにいなくても、出身県を知る方法はありますよ！
+        </p>
+    </details>
+    <details>
+        <summary>Q.森本さんってどこにいますか？（ヨコ4）Ⅲ</summary>
+
+        <p>
+           事前に配られたもの……あなたもアンケートで記入しましたよね…？
+        </p>
+    </details>
+</details>
+
+<details>
+    <summary>3-6</summary>
+    <details>
+        <summary>Q.なにこれ？（ヨコ5）Ⅰ</summary>
+
+        <p>
+            合言葉、は今日使いましたよね！
+        </p>
+    </details>
+    <details>
+        <summary>Q.なにこれ？（ヨコ5）Ⅱ</summary>
+
+        <p>
+            セミとひまわり、今日どこかで見たような……
+        </p>
+    </details>
+    <details>
+        <summary>Q.なにこれ？（ヨコ5）Ⅲ</summary>
+
+        <p>
+            例えば、とある大学の方のの胸元に…
+        </p>
+    </details>
+</details>
+
+<details>
+    <summary>3-7-1</summary>
+    <details>
+        <summary>Q.埋めてどうすんの？Ⅰ</summary>
+
+        <p>
+            意味ありげな数字、使ってみてください
+        </p>
+    </details>
+</details>
+
+<details>
+    <summary>3-7-2</summary>
+    <details>
+        <summary>Q.その次はなにするの？Ⅰ</summary>
+
+        <p>
+            完成しましたね！あともう一歩！最初に司会はなんて言っていましたか？
+        </p>
+    </details>
+    <details>
+        <summary>Q.その次はなにするの？Ⅱ</summary>
+
+        <p>
+            クロスワードの形をよく見てみてください
+        </p>
+    </details>
+    <details>
+        <summary>Q.その次はなにするの？Ⅲ</summary>
+
+        <p>
+            この謎解きではいろいろ入力しましたよね。確か…どこだっけ…？
+        </p>
+    </details>
+</details>
+
+<h2>おまけ</h2>
+
+<details>
+    <summary>終わった人へ</summary>
+    <details>
+        <summary>Q.終わってどうするの？Ⅰ</summary>
+
+        <p>
+            めっちゃ困ってる人がいたらスタッフに誘導してください
+        </p>
+    </details>
+    <details>
+        <summary>Q.終わってどうするの？Ⅱ</summary>
+
+        <p>
+            ネタバレ口出しは厳禁！
+        </p>
+    </details>
+    <details>
+        <summary>Q.終わってどうするの？Ⅲ</summary>
+
+        <p>
+            終わった人同士こっそり感想戦を
+        </p>
+    </details>
+    <details>
+        <summary>Q.終わってどうするの？Ⅳ</summary>
+
+        <p>
+            あとまあ，酒とお菓子つまんでおいていただければ？しばしご歓談を～
+        </p>
+    </details>
+</details>
+
+<br>
+
+<button class="backBtn" onclick="goHome()">
+戻る
+</button>
+
+</div>
+
+</div>
+
+<!-- 7ページ（クリア画面） -->
+<div id="page7" class="page">
+
+<div id="clearBox">
+
+<h1>
+おめでとうございます！<br>
+謎解きクリアです！<br>
+<span class="smallText">
+※スタッフまでこの画面を<br>見せにきてください
+</span>
+</h1>
+
+<p id="clearTime"></p>
+  
+</div>
+
+</div>
+
+<script>
+
+/* Firebase設定 */
+
+const firebaseConfig = {
+apiKey: "ここに貼る",
+authDomain: "ここに貼る",
+databaseURL: "ここに貼る",
+projectId: "ここに貼る"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db = firebase.database();
+
+/* ページ切り替え */
+
+function showPage(id){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+}
+
+function goHome(){
+showPage("page1");
+}
+
+function checkPassword(){
+
+let pw=document.getElementById("passwordBox").value;
+
+if(pw==="生きる") showPage("page2");
+else if(pw==="いきる") showPage("page2");
+else if(pw==="イキル") showPage("page2");
+else if(pw==="光") showPage("page3");
+else if(pw==="ひかり") showPage("page3");
+else if(pw==="ヒカリ") showPage("page3");
+else if(pw==="真意") showPage("page4");
+else if(pw==="しんい") showPage("page4");
+else if(pw==="シンイ") showPage("page4");
+else if(pw==="無限") showPage("page5");
+else if(pw==="むげん") showPage("page5");
+else if(pw==="ムゲン") showPage("page5");
+else if(pw==="学び") showPage("page6");
+else if(pw==="まなび") showPage("page6");
+else if(pw==="マナビ") showPage("page6");
+else if(pw==="むりはきけん") showPage7();
+else if(pw==="もりもとなぎさはどこ？") showPage("page8");
+else if(pw==="ヒント") showPage("page9");
+else alert("パスワードが違います");
+
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+
+    const acc = document.querySelectorAll(".accordion");
+
+    acc.forEach(button => {
+
+        button.addEventListener("click", function(){
+
+            this.classList.toggle("active");
+
+            const panel = this.nextElementSibling;
+
+            if(getComputedStyle(panel).display === "none"){
+                panel.style.display = "block";
+            }else{
+                panel.style.display = "none";
+            }
+
+        });
+
+    });
+
+});
+
+/* ランキング */
+
+function addName(){
+
+let name=document.getElementById("nameInput").value;
+
+if(name==="") return;
+
+db.ref("ranking").push({
+name:name,
+time:Date.now()
+});
+
+document.getElementById("nameInput").value="";
+
+}
+
+db.ref("ranking").on("value", snapshot=>{
+
+let data=[];
+
+snapshot.forEach(child=>{
+data.push(child.val());
+});
+
+data.sort((a,b)=>a.time-b.time);
+
+let list=document.getElementById("list");
+list.innerHTML="";
+
+data.forEach(e=>{
+let li=document.createElement("li");
+li.textContent=e.name;
+list.appendChild(li);
+});
+
+});
+
+function showPage7(){
+
+showPage("page7");
+
+let now = new Date();
+
+let time =
+now.getHours().toString().padStart(2,"0") + "時" +
+now.getMinutes().toString().padStart(2,"0") + "分" +
+now.getSeconds().toString().padStart(2,"0") + "秒";
+
+document.getElementById("clearTime").textContent = "クリア時間：" + time;
+
+}
+
+</script>
+
+</body>
+</html>
