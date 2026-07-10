@@ -109,6 +109,65 @@ font-size:20px;     /* 小さくする */
 font-weight:400;    /* 細くする */
 }
 
+/* ===== ヒントページ ===== */
+
+.hintPage{
+    padding:30px;
+    height:100vh;
+    overflow-y:auto;
+    box-sizing:border-box;
+    background:white;
+}
+
+.hintTitle{
+    margin-top:40px;
+    margin-bottom:10px;
+}
+
+.accordion{
+    width:100%;
+    text-align:left;
+    padding:15px;
+    margin-top:10px;
+    font-size:22px;
+    background:#f0f0f0;
+    color:#000;
+    border:none;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.accordion:hover{
+    background:#e0e0e0;
+}
+
+.accordion::before{
+    content:"▶ ";
+}
+
+.accordion.active::before{
+    content:"▼ ";
+}
+
+.panel{
+    display:none;
+    padding:15px 20px;
+    background:#fafafa;
+    border-left:5px solid black;
+    margin-bottom:15px;
+    font-size:20px;
+    line-height:1.8;
+}
+
+/* page9だけ戻るボタンを下に配置 */
+#page9 .backBtn{
+    position:static;
+    transform:none;
+    display:block;
+    margin:40px auto;
+}
+
+    
 </style>
 </head>
 
@@ -168,6 +227,60 @@ font-weight:400;    /* 細くする */
 <img src="answer_5.jpg" alt="画像5">
 
 <button class="backBtn" onclick="goHome()">戻る</button>
+
+</div>
+
+<!-- ヒントページ -->
+<div id="page9" class="page">
+
+<div class="hintPage">
+
+<h1>ヒント</h1>
+
+<h2>1の謎</h2>
+
+<button class="hintButton" onclick="toggleHint('hint1')">
+ヒント1
+</button>
+
+<div id="hint1" class="hintBox">
+○○です
+</div>
+
+<button class="hintButton" onclick="toggleHint('hint2')">
+ヒント2
+</button>
+
+<div id="hint2" class="hintBox">
+□□です
+</div>
+
+
+<h2>2の謎</h2>
+
+<button class="hintButton" onclick="toggleHint('hint3')">
+ヒント1
+</button>
+
+<div id="hint3" class="hintBox">
+△△です
+</div>
+
+<button class="hintButton" onclick="toggleHint('hint4')">
+ヒント2
+</button>
+
+<div id="hint4" class="hintBox">
+◇◇です
+</div>
+
+<br><br>
+
+<button class="backBtn" onclick="goHome()">
+戻る
+</button>
+
+</div>
 
 </div>
 
@@ -237,9 +350,34 @@ else if(pw==="まなび") showPage("page6");
 else if(pw==="マナビ") showPage("page6");
 else if(pw==="むりはきけん") showPage7();
 else if(pw==="もりもとなぎさはどこ？") showPage("page8");
+else if(pw==="ヒント") showPage("page9");
 else alert("パスワードが違います");
 
 }
+
+document.addEventListener("DOMContentLoaded", function(){
+
+    const acc = document.getElementsByClassName("accordion");
+
+    for(let i=0;i<acc.length;i++){
+
+        acc[i].addEventListener("click",function(){
+
+            this.classList.toggle("active");
+
+            const panel=this.nextElementSibling;
+
+            if(panel.style.display==="block"){
+                panel.style.display="none";
+            }else{
+                panel.style.display="block";
+            }
+
+        });
+
+    }
+
+});
 
 /* ランキング */
 
